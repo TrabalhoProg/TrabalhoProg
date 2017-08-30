@@ -4,81 +4,61 @@ using UnityEngine;
 
 namespace Model
 {
-    public class Tiro
+
+    public class GameModel
     {
-        public GameObject tiroObject;
-        public float massa, densidade;
-    }
 
-    public class Player
-    {
-        int _escudo, _maxMovement;
-        Queue<Tiro> _tiros;
-
-        public Player()
+        struct Vento
         {
-            _escudo = 3;
-            _maxMovement = 5;
-            _tiros = new Queue<Tiro>();
+            public bool direcao;
+            public float forca;
         }
 
-        public int Escudo
+        Vento vento;
+
+        int _playerSide;
+
+        public PlayerModel player1, player2;
+
+
+
+        public GameModel(GameObject[] tiros)
         {
-            get
-            {
-                return _escudo;
-            }
+            _playerSide = 1;
+            vento = new Vento() { direcao = false, forca = 0f };
+            player1 = new PlayerModel(tiros);
+            player2 = new PlayerModel(tiros);
         }
 
-        public int MaxMovement
+        public void ChangeVento()
         {
-            get
-            {
-                return _maxMovement;
-            }
+
         }
 
-        public void RetirarEscudo()
+        public void ChangeSide()
         {
-            if (_escudo > 0)
-                _escudo--;
+            _playerSide = _playerSide == 1 ? 2 : 1;
+        }
+
+        public int GetPlayerSide()
+        {
+            return _playerSide;
+        }
+
+        public int GetCurrentMaxMovement()
+        {
+            if (_playerSide == 1)
+                return player1.MaxMovement;
             else
-                Morrer();
+                return player2.MaxMovement;
         }
 
-        public void RetirarMaxMovement()
+        public GameObject Atirar()
         {
-            if (MaxMovement > 0)
-            {
-                _maxMovement--;
-            }
-        }
-
-        public void AumentarMaxMovement()
-        {
-            _maxMovement++;
-        }
-
-        public void Atirar(float angulo, float forca, float vento)
-        {
-
-        }
-
-        public void Morrer()
-        {
-
-        }
-    }
-
-    public class GameModel : MonoBehaviour
-    {
-
-        public Player player1, player2;
-
-        public GameModel()
-        {
-            player1 = new Player();
-            player2 = new Player();
+            if (_playerSide == 1)
+                return player1.Atirar();
+            else
+                return player2.Atirar();
         }
 
     }
