@@ -48,13 +48,14 @@ public class GameView : MonoBehaviour
 
     private void Update()
     {
+        if (gameController.hasControl)
+        {
+            Movimentar(gameController.GetPlayerSide() == 1 ? player1 : player2, Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
-        Movimentar(gameController.GetPlayerSide() == 1 ? player1 : player2, Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            AjustarAngulo(gameController.GetPlayerSide() == 1 ? player1ArmaTransform : player2ArmaTransform, Input.GetAxis("AnguloArma"));
 
-        AjustarAngulo(gameController.GetPlayerSide() == 1 ? player1ArmaTransform : player2ArmaTransform, Input.GetAxis("AnguloArma"));
-
-        CarregarTiro();
-
+            CarregarTiro();
+        }
     }
 
     private void LateUpdate()
@@ -64,7 +65,7 @@ public class GameView : MonoBehaviour
 
     void UpdateUI()
     {
-        anguloText.text = gameController.AnguloArma.ToString();
+        anguloText.text = gameController.GetCurrentAngulo().ToString();
         movementText.text = gameController.PlayerMovement.ToString();
         forcaSlider.value = gameController.CurrentPlayerForce;
     }
@@ -118,8 +119,9 @@ public class GameView : MonoBehaviour
     {
         GameObject shot = gameController.Atirar();
         shot.GetComponent<ShotMover>().forca = gameController.CurrentPlayerForce;
-        shot.GetComponent<ShotMover>().angulo = gameController.AnguloArma;
+        shot.GetComponent<ShotMover>().angulo = gameController.GetCurrentAngulo();
         shot.GetComponent<ShotMover>().isRight = gameController.GetPlayerSide() == 1;
+        shot.GetComponent<ShotMover>().whoShot = gameController.GetPlayerSide();
         if (gameController.GetPlayerSide() == 1)
         {
             Instantiate(shot, player1ShotReference);
@@ -134,8 +136,8 @@ public class GameView : MonoBehaviour
     {
         if (angulo != 0)
         {
-            gameController.AnguloArma = gameController.AnguloArma + angulo;
-            arma.rotation = Quaternion.Euler(0f, 0f, gameController.GetPlayerSide() == 1 ? gameController.AnguloArma : -gameController.AnguloArma);
+            float rotation = gameController.AjustarAngulo(angulo);
+            arma.rotation = Quaternion.Euler(0f, 0f, gameController.GetPlayerSide() == 1 ? rotation : -rotation);
         }
 
     }
@@ -145,8 +147,6 @@ public class GameView : MonoBehaviour
         gameController.ChangePlayerSide();
         gameController.isShotCharging = false;
         gameController.CurrentPlayerForce = 0f;
-        gameController.AnguloArma = gameController.GetPlayerSide() == 1 ? gameController.player1LastAngulo : gameController.player2LastAngulo;
-        AjustarAngulo(gameController.GetPlayerSide() == 1 ? player1ArmaTransform : player2ArmaTransform, 0f);
         gameController.PlayerMovement = (float)gameController.GetCurrentMaxMovement() * 100;
     }
 }

@@ -18,21 +18,24 @@ namespace Model
 
         int _playerSide;
 
-        public PlayerModel player1, player2;
-
-
-
-        public GameModel(GameObject[] tiros)
+        public GameModel()
         {
             _playerSide = 1;
             vento = new Vento() { direcao = false, forca = 0f };
-            player1 = new PlayerModel(tiros);
-            player2 = new PlayerModel(tiros);
+            ChangeVento();
         }
 
         public void ChangeVento()
         {
+            //set direcao
+            float direcao = Random.Range(0f, 100f);
+            if (direcao < 50)
+                vento.direcao = false;
+            else
+                vento.direcao = true;
 
+            //setforca
+            vento.forca = Random.Range(0f, 100f);
         }
 
         public void ChangeSide()
@@ -43,22 +46,6 @@ namespace Model
         public int GetPlayerSide()
         {
             return _playerSide;
-        }
-
-        public int GetCurrentMaxMovement()
-        {
-            if (_playerSide == 1)
-                return player1.MaxMovement;
-            else
-                return player2.MaxMovement;
-        }
-
-        public GameObject Atirar()
-        {
-            if (_playerSide == 1)
-                return player1.Atirar();
-            else
-                return player2.Atirar();
         }
 
     }

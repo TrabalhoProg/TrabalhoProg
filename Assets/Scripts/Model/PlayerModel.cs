@@ -9,19 +9,16 @@ namespace Model
     {
 
         int _escudo, _maxMovement;
+        float _angulo;
         Queue<GameObject> _tiroFila;
         GameObject[] tiro;
 
-        public PlayerModel(GameObject[] tiros)
+
+        public PlayerModel()
         {
             _escudo = 3;
             _maxMovement = 5;
-            tiro = tiros;
             _tiroFila = new Queue<GameObject>();
-            for (int i = 0; i < 3; i++)
-            {
-                _tiroFila.Enqueue(tiros[Random.Range(0, (tiros.Length - 1))]);
-            }
         }
 
         public int Escudo
@@ -40,12 +37,48 @@ namespace Model
             }
         }
 
-        public void RetirarEscudo()
+        public float Angulo
+        {
+            get
+            {
+                return _angulo;
+            }
+
+            set
+            {
+                if (value > 0 && value < 60)
+                {
+                    _angulo = value;
+                }
+                else if (value < 0)
+                {
+                    _angulo = 0;
+                }
+                else if (value > 60)
+                {
+                    _angulo = 60f;
+                }
+
+            }
+        }
+
+        public bool RetirarEscudo()
         {
             if (_escudo > 0)
+            {
                 _escudo--;
+                return false;
+            }
             else
-                Morrer();
+                return true;
+        }
+
+        public void AumentarEscudo()
+        {
+            if (_escudo < 0)
+            {
+                _escudo++;
+            }
         }
 
         public void RetirarMaxMovement()
@@ -63,14 +96,18 @@ namespace Model
 
         public GameObject Atirar()
         {
-            _tiroFila.Enqueue(tiro[Random.Range(0, tiro.Length)]);
+            _tiroFila.Enqueue(tiro[Random.Range(0, tiro.Length - 1)]);
             GameObject ret = _tiroFila.Dequeue();
             return ret;
         }
 
-        public void Morrer()
+        public void CarregarTiros(GameObject[] tiros)
         {
-
+            tiro = tiros;
+            for (int i = 0; i < 3; i++)
+            {
+                _tiroFila.Enqueue(tiros[Random.Range(0, tiros.Length - 1)]);
+            }
         }
 
         public Queue<GameObject> GetTiroFila()

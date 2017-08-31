@@ -10,13 +10,13 @@ public class GameController : MonoBehaviour
 
     GameModel gameModel;
 
+    PlayerController player1Controller, player2Controller;
+
     float _playerMovement;
-    float _anguloArma;
     float _currentPlayerForce;
 
     public float playerSpeed, shotForce;
-    public float player1LastAngulo, player2LastAngulo;
-    public bool isShotCharging;
+    public bool isShotCharging,hasControl;
 
     public float playerMaxForce;
     public float PlayerMovement
@@ -34,22 +34,7 @@ public class GameController : MonoBehaviour
                 _playerMovement = value;
         }
     }
-    public float AnguloArma
-    {
-        get
-        {
-            return _anguloArma;
-        }
-
-        set
-        {
-            if (value > 90)
-                _anguloArma = 90;
-            else if (value < 0)
-                _anguloArma = 0;
-            else _anguloArma = value;
-        }
-    }
+    
     public float CurrentPlayerForce
     {
         get
@@ -79,29 +64,30 @@ public class GameController : MonoBehaviour
         playerMaxForce = 800f;
         shotForce = 10f;
         playerSpeed = 100;
+
+        hasControl = true;
+
         Inicializar();
     }
 
     public void Inicializar()
     {
-        gameModel = new GameModel(tiros);
+        player1Controller = GameObject.FindGameObjectWithTag("Player1").GetComponent<PlayerController>();
+        player1Controller.CarregarTiros(tiros);
+
+        player2Controller = GameObject.FindGameObjectWithTag("Player2").GetComponent<PlayerController>();
+        player2Controller.CarregarTiros(tiros);
+        
+        gameModel = new GameModel();
         isShotCharging = false;
         CurrentPlayerForce = 0f;
-        AnguloArma = player1LastAngulo = player2LastAngulo = 0f;
-        PlayerMovement = (float)gameModel.GetCurrentMaxMovement() * 100;
+        PlayerMovement = (float)GetCurrentMaxMovement() * 100;
+        //hasControl = false;
     }
 
 
     public void ChangePlayerSide()
     {
-        if (gameModel.GetPlayerSide() == 1)
-        {
-            player1LastAngulo = Mathf.Abs(AnguloArma);
-        }
-        else
-        {
-            player2LastAngulo = Mathf.Abs(AnguloArma);
-        }
         gameModel.ChangeSide();
     }
 
@@ -109,13 +95,71 @@ public class GameController : MonoBehaviour
     {
         return gameModel.GetPlayerSide();
     }
+
     public int GetCurrentMaxMovement()
     {
-        return gameModel.GetCurrentMaxMovement();
+        if (gameModel.GetPlayerSide() == 1)
+        {
+            return player1Controller.GetCurrentMaxMovement();
+        }
+        else
+        {
+            return player2Controller.GetCurrentMaxMovement();
+        }
     }
 
     public GameObject Atirar()
     {
-        return gameModel.Atirar();
+        if (gameModel.GetPlayerSide() == 1)
+        {
+            return player1Controller.Atirar();
+        }
+        else
+        {
+            return player2Controller.Atirar();
+        }
     }
+
+    public void RemoveEscudo(int player)
+    {
+        if (player == 1)
+        {
+            if (player1Controller.RetirarEscudo())
+            {
+                player1Controller.Morrer();
+            }
+        }
+        else
+        {
+            if (player2Controller.RetirarEscudo())
+            {
+                player2Controller.RetirarEscudo();
+            }
+        }
+    }
+
+    public float AjustarAngulo(float angulo)
+    {
+        if (gameModel.GetPlayerSide()==1)
+        {
+            return player1Controller.AjustarAngulo(angulo);
+        }
+        else
+        {
+           return  player2Controller.AjustarAngulo(angulo);
+        }
+    }
+    
+    public float GetCurrentAngulo()
+    {
+        if (gameModel.GetPlayerSide()==1)
+        {
+            return player1Controller.GetAngulo();
+        }
+        else
+        {
+            return player2Controller.GetAngulo();
+        }
+    }
+
 }
