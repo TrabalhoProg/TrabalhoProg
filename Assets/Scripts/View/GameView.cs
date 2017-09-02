@@ -2,151 +2,153 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Controller;
 
-public class GameView : MonoBehaviour
+namespace View
 {
-
-    public GameController gameController;
-
-    public GameObject player1, player2;
-
-    public Transform player1ArmaTransform, player2ArmaTransform, player1ShotReference, player2ShotReference;
-
-    public Text movementText, anguloText;
-    public Slider forcaSlider;
-
-
-    private void Start()
+    public class GameView : MonoBehaviour
     {
-        Transform[] temp = player1.GetComponentsInChildren<Transform>();
-        foreach (var item in temp)
+
+        public GameController gameController;
+
+        public Text movementText, anguloText, ventoText, generalUI, player1UI, player2UI;
+        public Slider forcaSlider;
+        public Button RestartBtn;
+        public GameObject BottomUI,TopUi;
+
+        private void Start()
         {
-            if (item.CompareTag("Arma"))
-            {
-                player1ArmaTransform = item;
-            }
-            else if (item.CompareTag("ShotReference"))
-            {
-                player1ShotReference = item;
-            }
+
+            forcaSlider.maxValue = gameController.playerMaxForce;
+            UpdateUI();
         }
-        temp = player2.GetComponentsInChildren<Transform>();
-        foreach (var item in temp)
+
+        private void LateUpdate()
         {
-            if (item.CompareTag("Arma"))
-            {
-                player2ArmaTransform = item;
-            }
-            else if (item.CompareTag("ShotReference"))
-            {
-                player2ShotReference = item;
-            }
+            UpdateUI();
         }
-        forcaSlider.maxValue = gameController.playerMaxForce;
-        UpdateUI();
-    }
 
-    private void Update()
-    {
-        if (gameController.hasControl)
+        void UpdateUI()
         {
-            Movimentar(gameController.GetPlayerSide() == 1 ? player1 : player2, Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-
-            AjustarAngulo(gameController.GetPlayerSide() == 1 ? player1ArmaTransform : player2ArmaTransform, Input.GetAxis("AnguloArma"));
-
-            CarregarTiro();
-        }
-    }
-
-    private void LateUpdate()
-    {
-        UpdateUI();
-    }
-
-    void UpdateUI()
-    {
-        anguloText.text = gameController.GetCurrentAngulo().ToString();
-        movementText.text = gameController.PlayerMovement.ToString();
-        forcaSlider.value = gameController.CurrentPlayerForce;
-    }
-
-    public void Movimentar(GameObject player, float xMovement, float yMovement)
-    {
-        Rigidbody2D playerRb = player.GetComponent<Rigidbody2D>();
-        if ((xMovement != 0 || yMovement != 0) && !gameController.isShotCharging)
-        {
-            if (gameController.PlayerMovement > 0)
+            if (gameController.GetGameState() == 1)
             {
-                float x = xMovement * gameController.playerSpeed * Time.deltaTime;
-                float y = yMovement * gameController.playerSpeed * Time.deltaTime;
-                playerRb.velocity = new Vector2(x, y);
-                if (gameController.PlayerMovement > 0)
-                    gameController.PlayerMovement = gameController.PlayerMovement - (Mathf.Abs(x) + Mathf.Abs(y));
+                BottomUI.SetActive(false);
+                TopUi.SetActive(false);
+                RestartBtn.gameObject.SetActive(false);
+                player1UI.gameObject.SetActive(false);
+                player2UI.gameObject.SetActive(false);
+                ventoText.gameObject.SetActive(false);
+                anguloText.gameObject.SetActive(false);
+                movementText.gameObject.SetActive(false);
+                forcaSlider.gameObject.SetActive(false);
+                generalUI.gameObject.SetActive(true);
+                generalUI.text = gameController.GetPlayerSide() == 1 ? "Escolha a posição do Player 1" : "Escolha a posição do Player 2";
+                Vector3 mouseRef = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                if (Input.GetMouseButtonDown(0)
+                    && gameController.GetPlayerSide() == 1
+                    && mouseRef.x > -16f
+                    && mouseRef.x < 0f
+                    && mouseRef.y > -8f
+                    && mouseRef.y < 8f)
+                {
+                    gameController.EscolherPosição(mouseRef);
+                }
+                else if (Input.GetMouseButtonDown(0)
+                    && gameController.GetPlayerSide() == 2
+                    && mouseRef.x > 0f
+                    && mouseRef.x < 16f
+                    && mouseRef.y > -8f
+                    && mouseRef.y < 8f)
+                {
+                    gameController.EscolherPosição(mouseRef);
+                }
+            }
+            else if (gameController.GetGameState() == 2)
+            {
+                int[] temp = gameController.GetCurrentScore();
+                player1UI.text = temp[0].ToString();
+                player2UI.text = temp[1].ToString();
+                ventoText.text = ReturnVento(gameController.GetCurrentVento());
+                anguloText.text = Mathf.Round(gameController.GetCurrentAngulo()).ToString() + "°";
+                movementText.text = Mathf.Round(gameController.PlayerMovement).ToString();
+                forcaSlider.value = gameController.CurrentPlayerForce;
+                BottomUI.SetActive(true);
+                TopUi.SetActive(true);
+                player1UI.gameObject.SetActive(true);
+                player2UI.gameObject.SetActive(true);
+                RestartBtn.gameObject.SetActive(false);
+                generalUI.gameObject.SetActive(false);
+                ventoText.gameObject.SetActive(true);
+                anguloText.gameObject.SetActive(true);
+                movementText.gameObject.SetActive(true);
+                forcaSlider.gameObject.SetActive(true);
             }
             else
             {
-                playerRb.velocity = Vector2.zero;
-                gameController.PlayerMovement = 0;
+                int[] temp = gameController.GetCurrentScore();
+                if (temp[0] == 2)
+                {
+                    generalUI.text = "Game Over\nPlayer 1 é o vencedor";
+                    RestartBtn.gameObject.SetActive(true);
+                    generalUI.gameObject.SetActive(true);
+
+                }
+                else if (temp[1] == 2)
+                {
+                    generalUI.text = "Game Over\nPlayer 2 é o vencedor";
+                    RestartBtn.gameObject.SetActive(true);
+                    generalUI.gameObject.SetActive(true);
+                }
+                else
+                {
+                    if (gameController.GetPlayerSide() == 1)
+                        generalUI.text = "Player 1 ganhou essa rodada";
+                    else
+                        generalUI.text = "Player 2 ganhou essa rodadr";
+                    generalUI.gameObject.SetActive(true);
+                }
             }
         }
-        else
-        {
-            playerRb.velocity = Vector2.zero;
-        }
 
-    }
+        
 
-    public void CarregarTiro()
-    {
-        if (!gameController.isShotCharging && Input.GetButton("Fire1"))
+        public string ReturnVento(float vento)
         {
-            gameController.isShotCharging = true;
+            if (vento == 0)
+            {
+                return "|";
+            }
+            else if (vento > 0)
+            {
+                if (vento > 2)
+                {
+                    return ">>>";
+                }
+                else if (vento > 1)
+                {
+                    return ">>";
+                }
+                else
+                {
+                    return ">";
+                }
+            }
+            else
+            {
+                if (vento < -2)
+                {
+                    return "<<<";
+                }
+                else if (vento < -1)
+                {
+                    return "<<";
+                }
+                else
+                {
+                    return "<";
+                }
+            }
         }
-        if (gameController.isShotCharging && Input.GetButton("Fire1"))
-        {
-            gameController.CurrentPlayerForce += gameController.shotForce;
-        }
-        else if (gameController.isShotCharging && !Input.GetButton("Fire1"))
-        {
-            gameController.isShotCharging = false;
-            Atirar();
-            gameController.CurrentPlayerForce = 0;
-            IniciarNovoTurno();
-        }
-    }
-
-    public void Atirar()
-    {
-        GameObject shot = gameController.Atirar();
-        shot.GetComponent<ShotMover>().forca = gameController.CurrentPlayerForce;
-        shot.GetComponent<ShotMover>().angulo = gameController.GetCurrentAngulo();
-        shot.GetComponent<ShotMover>().isRight = gameController.GetPlayerSide() == 1;
-        shot.GetComponent<ShotMover>().whoShot = gameController.GetPlayerSide();
-        if (gameController.GetPlayerSide() == 1)
-        {
-            Instantiate(shot, player1ShotReference);
-        }
-        else
-        {
-            Instantiate(shot, player2ShotReference);
-        }
-    }
-
-    public void AjustarAngulo(Transform arma, float angulo)
-    {
-        if (angulo != 0)
-        {
-            float rotation = gameController.AjustarAngulo(angulo);
-            arma.rotation = Quaternion.Euler(0f, 0f, gameController.GetPlayerSide() == 1 ? rotation : -rotation);
-        }
-
-    }
-
-    public void IniciarNovoTurno()
-    {
-        gameController.ChangePlayerSide();
-        gameController.isShotCharging = false;
-        gameController.CurrentPlayerForce = 0f;
-        gameController.PlayerMovement = (float)gameController.GetCurrentMaxMovement() * 100;
     }
 }
+

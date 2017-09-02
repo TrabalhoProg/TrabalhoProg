@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Controller;
 
 public class ShotMover : MonoBehaviour
 {
-    public GameController gameController;
+    GameController gameController;
+    public GameObject Explosion;
 
     Rigidbody2D rb;
     public Vector2 forcaRef;
@@ -33,8 +35,12 @@ public class ShotMover : MonoBehaviour
         {
             if (collision.gameObject.CompareTag("Player2"))
             {
+                Instantiate(Explosion,transform.position,transform.rotation);
                 Destroy(gameObject);
-                gameController.RemoveEscudo(2);
+                if (gameController.RemoveEscudo(2))
+                {
+                    collision.gameObject.GetComponent<View.PlayerView>().Morrer();
+                }
             }
         }
 
@@ -42,8 +48,12 @@ public class ShotMover : MonoBehaviour
         {
             if (collision.gameObject.CompareTag("Player1"))
             {
+                Instantiate(Explosion, transform.position, transform.rotation);
                 Destroy(gameObject);
-                gameController.RemoveEscudo(1);
+                if (gameController.RemoveEscudo(1))
+                {
+                    collision.gameObject.GetComponent<View.PlayerView>().Morrer();
+                }
             }
         }
 

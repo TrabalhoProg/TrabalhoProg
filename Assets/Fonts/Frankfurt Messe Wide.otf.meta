@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 41c6bceb6005bc04389bb98e9b0498da
+timeCreated: 1504332701
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Frankfurt Messe
+  fontNames:
+  - Frankfurt Messe
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 1101217029e7f4c4592997df329d5d61, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

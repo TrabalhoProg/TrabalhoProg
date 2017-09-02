@@ -12,12 +12,13 @@ namespace Model
         float _angulo;
         Queue<GameObject> _tiroFila;
         GameObject[] tiro;
-
+        bool _isDead;
 
         public PlayerModel()
         {
-            _escudo = 3;
-            _maxMovement = 5;
+            _isDead = false;
+            _escudo = 0;
+            _maxMovement = 10;
             _tiroFila = new Queue<GameObject>();
         }
 
@@ -62,6 +63,14 @@ namespace Model
             }
         }
 
+        public bool IsDead
+        {
+            get
+            {
+                return _isDead;
+            }
+        }
+
         public bool RetirarEscudo()
         {
             if (_escudo > 0)
@@ -70,7 +79,10 @@ namespace Model
                 return false;
             }
             else
+            {
+                _isDead = true;
                 return true;
+            }
         }
 
         public void AumentarEscudo()
@@ -96,7 +108,7 @@ namespace Model
 
         public GameObject Atirar()
         {
-            _tiroFila.Enqueue(tiro[Random.Range(0, tiro.Length - 1)]);
+            _tiroFila.Enqueue(tiro[Random.Range(0, tiro.Length)]);
             GameObject ret = _tiroFila.Dequeue();
             return ret;
         }
@@ -106,7 +118,7 @@ namespace Model
             tiro = tiros;
             for (int i = 0; i < 3; i++)
             {
-                _tiroFila.Enqueue(tiros[Random.Range(0, tiros.Length - 1)]);
+                _tiroFila.Enqueue(tiros[Random.Range(0, tiros.Length)]);
             }
         }
 
