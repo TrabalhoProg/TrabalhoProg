@@ -91,8 +91,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Explosion: {fileID: 1530813856715798, guid: c00e4c34e0ca7c44fadf7effeee3ee73, type: 2}
   forcaRef: {x: 1, y: 1}
-  forca: 1117.1481
-  angulo: 47.002647
+  forca: 639.1314
+  angulo: 60
   timeToDestroy: 4
   isRight: 1
   whoShot: 1
@@ -100,7 +100,8 @@ MonoBehaviour:
   colorsToChange: []
   timeToChange: 0
   shotDisperse: 1
-  timeToDisperse: 1.2
+  timeToDisperse: 1
+  removeMovimento: 0
 --- !u!212 &212744667303669056
 SpriteRenderer:
   m_ObjectHideFlags: 1

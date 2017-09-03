@@ -107,14 +107,16 @@ namespace Controller
             {
                 player2Controller = GameObject.FindGameObjectWithTag("Player2").GetComponent<PlayerController>();
             }
+            player1Controller.ResetarPlayer();
+            player1Controller.CarregarTiros(tiros);
             //player1Controller.gameObject.SetActive(true);
             player1Controller.gameObject.SetActive(false);
-            player1Controller.CarregarTiros(tiros);
+
+            player2Controller.ResetarPlayer();
+            player2Controller.CarregarTiros(tiros);
             //player2Controller.gameObject.SetActive(true);
             player2Controller.gameObject.SetActive(false);
-            player2Controller.CarregarTiros(tiros);
-
-
+         
             gameModel = new GameModel();
             //partidas = new Stack<GameModel>();
             isShotCharging = false;

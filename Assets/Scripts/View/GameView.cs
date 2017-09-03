@@ -12,10 +12,11 @@ namespace View
         public GameController gameController;
 
         public Text movementText, anguloText, ventoText, generalUI, player1UI, player2UI;
+        public Image forcaPanel;
         public Slider forcaSlider;
         public Animator sliderAnimator;
         public Button RestartBtn;
-        public GameObject BottomUI,TopUi;
+        public GameObject BottomUI, TopUi;
 
         private void Start()
         {
@@ -26,12 +27,33 @@ namespace View
 
         private void LateUpdate()
         {
-            sliderAnimator.SetFloat("Forca",gameController.CurrentPlayerForce);
+            if (forcaSlider.IsActive())
+            {
+                sliderAnimator.SetFloat("Forca", gameController.CurrentPlayerForce);
+            }
             UpdateUI();
         }
 
         void UpdateUI()
         {
+            if (gameController.CurrentPlayerForce != 0)
+            {
+                var temp = forcaPanel.GetComponentInChildren<Text>();
+                forcaPanel.color = new Color(1f, 1f, 1f, 0.5f);
+                if (temp != null)
+                {
+                    temp.color = Color.black;
+                }
+            }
+            else
+            {
+                forcaPanel.color = new Color(1f, 1f, 1f, 0f);
+                var temp = forcaPanel.GetComponentInChildren<Text>();
+                if (temp != null)
+                {
+                    temp.color = Color.white;
+                }
+            }
             if (gameController.GetGameState() == 1)
             {
                 BottomUI.SetActive(false);
@@ -103,16 +125,16 @@ namespace View
                 }
                 else
                 {
-                    if (gameController.GetPlayerSide() == 1)
-                        generalUI.text = "Player 1 ganhou essa rodada";
-                    else
-                        generalUI.text = "Player 2 ganhou essa rodadr";
-                    generalUI.gameObject.SetActive(true);
+                    //if (gameController.GetPlayerSide() == 1)
+                    //    generalUI.text = "Player 1 ganhou essa rodada";
+                    //else
+                    //    generalUI.text = "Player 2 ganhou essa rodadr";
+                    //generalUI.gameObject.SetActive(true);
                 }
             }
         }
 
-        
+
 
         public string ReturnVento(float vento)
         {
