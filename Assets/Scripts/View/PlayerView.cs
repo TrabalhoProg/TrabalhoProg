@@ -14,8 +14,8 @@ namespace View
         public GameObject Explosion;
 
         public RectTransform EscudoHolder, MunicaoHolder;
-        public GameObject EscudoUI, ShotUI;
-        int currentEscudo, escudoPadding = 0, municaoPadding = 0;
+        public GameObject EscudoUI, ShotUI,indicatorUI;
+        int currentEscudo, escudoPadding = 0;
         Stack<GameObject> escudosObj;
 
         public Transform playerArmaTransform, playerShotReference;
@@ -26,6 +26,10 @@ namespace View
         float forceMultiplier = 1;
 
         Vector3 lastLocationRef;
+
+        public GameObject shotParticle;
+
+       
 
         void Start()
         {
@@ -78,11 +82,11 @@ namespace View
 
             if (gameController.GetPlayerSide() == thisPlayer)
             {
-                //MunicaoHolder.gameObject.SetActive(true);
+                indicatorUI.gameObject.SetActive(true);
             }
             else
             {
-                //MunicaoHolder.gameObject.SetActive(false);
+                indicatorUI.gameObject.SetActive(false);
             }
 
             if (gameController.GetGameState() == 2)
@@ -129,27 +133,11 @@ namespace View
 
         public void SetMunicaoUI()
         {
-            foreach (var item in MunicaoHolder.GetComponentsInChildren<Image>())
-            {
-                Destroy(item.gameObject);
-            }
-            municaoPadding = 0;
             var tempQueue = playerController.GetTiroFila();
-            foreach (var item in tempQueue)
+            var temp = MunicaoHolder.GetComponentsInChildren<Image>();
+            for (int i = 0; i < temp.Length; i++)
             {
-                var tempObj = Instantiate(ShotUI, MunicaoHolder);
-                var tempImage = item.GetComponent<SpriteRenderer>().color;
-                var tempImage2 = tempObj.GetComponent<Image>().color;
-                tempImage2 = tempImage;
-                var tempTransform = tempObj.GetComponent<RectTransform>();
-                if (thisPlayer == 2)
-                {
-                    tempTransform.anchorMax = new Vector2(1, 1);
-                    tempTransform.anchorMin = new Vector2(1, 1);
-                    tempTransform.pivot = new Vector2(1, 1);
-                }
-                tempTransform.position = new Vector3(tempTransform.position.x, tempTransform.position.y - municaoPadding, tempTransform.position.z);
-                municaoPadding++;
+                temp[i].sprite = tempQueue.ToArray()[i].GetComponent<SpriteRenderer>().sprite;
             }
         }
 
@@ -210,13 +198,14 @@ namespace View
 
         public void Atirar()
         {
+            
             GameObject shot = gameController.Atirar();
             SetMunicaoUI();
             shot.GetComponent<ShotMover>().forca = gameController.CurrentPlayerForce;
             shot.GetComponent<ShotMover>().angulo = playerController.GetAngulo();
             shot.GetComponent<ShotMover>().isRight = gameController.GetPlayerSide() == 1;
             shot.GetComponent<ShotMover>().whoShot = gameController.GetPlayerSide();
-
+            Instantiate(shotParticle, playerShotReference.transform.position, playerShotReference.transform.rotation);
             Instantiate(shot, playerShotReference.transform.position, playerShotReference.transform.rotation);
             StartCoroutine(EndTurn());
         }
@@ -250,6 +239,8 @@ namespace View
             gameObject.SetActive(false);
             AjustarRotacaoArma();
         }
+
+       
 
     }
 }

@@ -13,18 +13,20 @@ namespace View
 
         public Text movementText, anguloText, ventoText, generalUI, player1UI, player2UI;
         public Slider forcaSlider;
+        public Animator sliderAnimator;
         public Button RestartBtn;
         public GameObject BottomUI,TopUi;
 
         private void Start()
         {
-
+            //sliderAnimator = forcaSlider.gameObject.GetComponentInChildren<Animator>();
             forcaSlider.maxValue = gameController.playerMaxForce;
             UpdateUI();
         }
 
         private void LateUpdate()
         {
+            sliderAnimator.SetFloat("Forca",gameController.CurrentPlayerForce);
             UpdateUI();
         }
 

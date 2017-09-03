@@ -12,14 +12,17 @@ namespace Model
         float _angulo;
         Queue<GameObject> _tiroFila;
         GameObject[] tiro;
-        bool _isDead;
+        bool _isDead, _nextAumentarShotDano;
+
+        int doubleDanoCount = 0;
 
         public PlayerModel()
         {
             _isDead = false;
-            _escudo = 0;
-            _maxMovement = 10;
+            _escudo = 3;
+            _maxMovement = 3;
             _tiroFila = new Queue<GameObject>();
+            doubleDanoCount = 0;
         }
 
         public int Escudo
@@ -87,7 +90,7 @@ namespace Model
 
         public void AumentarEscudo()
         {
-            if (_escudo < 0)
+            if (_escudo > 0 && _escudo < 5)
             {
                 _escudo++;
             }
@@ -106,9 +109,20 @@ namespace Model
             _maxMovement++;
         }
 
+        public bool NextAumentarShotDano { get { return _nextAumentarShotDano; } }
+
         public GameObject Atirar()
         {
-            _tiroFila.Enqueue(tiro[Random.Range(0, tiro.Length)]);
+            if (doubleDanoCount > 0)
+            {
+                _nextAumentarShotDano = false;
+                doubleDanoCount = 0;
+            }
+            if (doubleDanoCount == 0 && _nextAumentarShotDano)
+            {
+                doubleDanoCount++;
+            }
+            _tiroFila.Enqueue(tiro[ReturnRandomTiroIndex()]);
             GameObject ret = _tiroFila.Dequeue();
             return ret;
         }
@@ -118,7 +132,7 @@ namespace Model
             tiro = tiros;
             for (int i = 0; i < 3; i++)
             {
-                _tiroFila.Enqueue(tiros[Random.Range(0, tiros.Length)]);
+                _tiroFila.Enqueue(tiros[ReturnRandomTiroIndex()]);
             }
         }
 
@@ -126,6 +140,26 @@ namespace Model
         {
             return _tiroFila;
         }
+        public int ReturnRandomTiroIndex()
+        {
+            float maxRange = 100f * tiro.Length;
+            float temp = Random.Range(-maxRange, maxRange);
+            temp = Mathf.Abs(temp);
+            for (int i = 0; i < (tiro.Length - 1); i++)
+            {
+                if (temp < ((i + 1) * 100f))
+                {
+                    return i;
+                }
+            }
+            return tiro.Length - 1;
+        }
+
+        public void AdicionarDano()
+        {
+            _nextAumentarShotDano = true;
+        }
+
     }
 
 }

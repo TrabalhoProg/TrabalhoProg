@@ -8,7 +8,10 @@ namespace Controller
     public class GameController : MonoBehaviour
     {
 
-        public GameObject[] tiros;
+        public GameObject[] tiros, pickupItems;
+
+        public Transform[] pickUpSpawnRefEsq, pickUpSpawnRefDir;
+        public int pickUpSpawnCount = 4;
 
         GameModel gameModel;
         //Stack<GameModel> partidas;
@@ -22,7 +25,9 @@ namespace Controller
         public float playerSpeed, shotForce;
         public bool isShotCharging, hasControl;
 
-        public float playerMaxForce;
+        public float playerMaxForce, playerMinForce;
+
+        Vector3 player1RefPosition, player2RefPosition;
 
         public float PlayerMovement
         {
@@ -65,7 +70,7 @@ namespace Controller
 
         private void Start()
         {
-            playerMaxForce = 1000f;
+            //playerMaxForce = 1000f;
             shotForce = 0.1f;
             playerSpeed = 100;
 
@@ -77,14 +82,14 @@ namespace Controller
         {
             if (GetPlayerSide() == 1)
             {
-                player1Controller.gameObject.transform.position = new Vector3(position.x, position.y, 0f);
-                player1Controller.gameObject.SetActive(true);
+                player1RefPosition = new Vector3(position.x, position.y, 0f);
+                //player1Controller.gameObject.SetActive(true);
                 gameModel.ChangeSide();
             }
             else
             {
-                player2Controller.gameObject.transform.position = new Vector3(position.x, position.y, 0f);
-                player2Controller.gameObject.SetActive(true);
+                player2RefPosition = new Vector3(position.x, position.y, 0f);
+                //player2Controller.gameObject.SetActive(true);
                 gameModel.ChangeSide();
                 gameModel.ChangeGameState();
                 IniciarPartida();
@@ -123,6 +128,12 @@ namespace Controller
 
         void IniciarPartida()
         {
+
+            player1Controller.gameObject.transform.position = player1RefPosition;
+            player2Controller.gameObject.transform.position = player2RefPosition;
+            player1Controller.gameObject.SetActive(true);
+            player2Controller.gameObject.SetActive(true);
+            SetPickUpItems();
             StartCoroutine(IniciarPartidaTime());
         }
 
@@ -225,7 +236,7 @@ namespace Controller
         {
             _currentVento = gameModel.ChangeVento();
             Physics2D.gravity = new Vector2(_currentVento, Physics2D.gravity.y);
-            Debug.Log(_currentVento);
+            //Debug.Log(_currentVento);
         }
 
         public float GetCurrentVento()
@@ -254,6 +265,82 @@ namespace Controller
             }
             return temp;
         }
-    }
+        public void AdicionarEscudo()
+        {
+            if (gameModel.GetPlayerSide() == 1)
+            {
+                player1Controller.AdicionarEscudo();
+            }
+            else
+            {
+                player2Controller.AdicionarEscudo();
+            }
+        }
+        public void AdicionarMovimento()
+        {
+            if (gameModel.GetPlayerSide() == 1)
+            {
+                player1Controller.AdicionarMovimento();
+            }
+            else
+            {
+                player2Controller.AdicionarMovimento();
+            }
+        }
+        public void AdicionarDano()
+        {
+            if (gameModel.GetPlayerSide() == 1)
+            {
+                player1Controller.AdicionarDano();
+            }
+            else
+            {
+                player2Controller.AdicionarDano();
+            }
+        }
 
+        public bool IsDoubleDano()
+        {
+            if (gameModel.GetPlayerSide() == 1)
+            {
+                return player1Controller.IsDoubleDano();
+            }
+            else
+            {
+                return player2Controller.IsDoubleDano();
+            }
+        }
+
+        public GameObject ReturnRandomPickUp()
+        {
+            float maxRange = 300f;
+            float temp = Random.Range(-maxRange, maxRange);
+            temp = Mathf.Abs(temp);
+            for (int i = 0; i < 3; i++)
+            {
+                if (temp < (i * 100f))
+                {
+                    return pickupItems[i];
+                }
+            }
+            return pickupItems[0];
+        }
+        void SetPickUpItems()
+        {
+            //int tempCount = pickUpSpawnCount;
+            //for (int i = 0; i < pickUpSpawnCount; i++)
+            //{
+            //    int tempIndex = Random.Range(0, pickUpSpawnRefEsq.Length);
+            //    for (int a = 0; a < pickUpSpawnRefEsq.Length; a++)
+            //    {
+            //        if (tempIndex==a)
+            //        {
+
+            //            break;
+            //        }
+            //    }
+            //}
+        }
+    }
 }
+

@@ -54,10 +54,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1.2
+  m_Mass: 2
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0.4
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -91,11 +91,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Explosion: {fileID: 1530813856715798, guid: c00e4c34e0ca7c44fadf7effeee3ee73, type: 2}
   forcaRef: {x: 1, y: 1}
-  forca: 800
-  angulo: 60
-  timeToDestroy: 4
+  forca: 1194.9481
+  angulo: 10.441907
+  timeToDestroy: 10
   isRight: 0
   whoShot: 2
+  canChangeColor: 1
+  colorsToChange:
+  - {r: 1, g: 0.8482759, b: 0, a: 1}
+  - {r: 1, g: 0.9724138, b: 0, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 0.90344834, g: 1, b: 0, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 0.75973624, b: 0.24264705, a: 1}
+  - {r: 0.99279916, g: 1, b: 0.47794116, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  timeToChange: 0.1
+  shotDisperse: 0
+  timeToDisperse: 0
+  removeMovimento: 1
 --- !u!212 &212419111728242802
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -128,7 +142,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 013287b5e983e854b9b90ba31d93a214, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9f85efd3d791ae84688d41f41be996da, type: 3}
   m_Color: {r: 1, g: 0.4852941, b: 0.4852941, a: 1}
   m_FlipX: 0
   m_FlipY: 0

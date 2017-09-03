@@ -67,6 +67,27 @@ namespace Controller
             playerModel = new PlayerModel();
         }
 
+        public void AdicionarEscudo()
+        {
+            playerModel.AumentarEscudo();
+        }
+        public void AdicionarMovimento()
+        {
+            playerModel.AumentarMaxMovement();
+        }
+        public void AdicionarDano()
+        {
+            playerModel.AdicionarDano();
+        }
+        public bool IsDoubleDano()
+        {
+            return playerModel.NextAumentarShotDano;
+        }
+
+        public void RemoveMovimento()
+        {
+            playerModel.RetirarMaxMovement();
+        }
     }
 
 }
