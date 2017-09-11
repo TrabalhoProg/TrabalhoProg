@@ -7,7 +7,7 @@ public class ShotMover : MonoBehaviour
 {
     GameController gameController;
     public GameObject Explosion;
-
+    public AudioClip explosionSound;
     int dano = 1;
 
     public int Dano { get { return dano; } }
@@ -60,12 +60,12 @@ public class ShotMover : MonoBehaviour
         var temp = gameObject;
         temp.GetComponent<ShotMover>().shotDisperse = false;
         temp.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
-        temp.GetComponent<ShotMover>().forca = Mathf.Abs(50f * rb.velocity.x);
+        temp.GetComponent<ShotMover>().forca = Mathf.Abs(60f * rb.velocity.x);
         Vector3 dir = isRight ? Quaternion.AngleAxis(angulo, Vector3.forward) * Vector3.right : Quaternion.AngleAxis(angulo, Vector3.back) * Vector3.left;
         rb.AddForce(dir * forca);
-        temp.GetComponent<ShotMover>().angulo = 20f;
+        temp.GetComponent<ShotMover>().angulo = 30f;
         Instantiate(temp, transform.position, transform.rotation);
-        temp.GetComponent<ShotMover>().angulo = -20f;
+        temp.GetComponent<ShotMover>().angulo = -30f;
         Instantiate(temp, transform.position, transform.rotation);
         Destroy(gameObject);
     }
@@ -102,6 +102,7 @@ public class ShotMover : MonoBehaviour
             {
                 Instantiate(Explosion, transform.position, transform.rotation);
                 Destroy(gameObject);
+                gameController.PlaySound(explosionSound);
                 for (int i = 0; i < dano; i++)
                 {
                     if (gameController.RemoveEscudo(2))
@@ -122,6 +123,8 @@ public class ShotMover : MonoBehaviour
             {
                 Instantiate(Explosion, transform.position, transform.rotation);
                 Destroy(gameObject);
+
+                gameController.PlaySound(explosionSound);
                 for (int i = 0; i < dano; i++)
                 {
                     if (gameController.RemoveEscudo(1))

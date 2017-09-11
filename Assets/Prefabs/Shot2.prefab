@@ -38,7 +38,7 @@ Transform:
   m_GameObject: {fileID: 1277354894005096}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -77,7 +77,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.3
+  m_Radius: 0.64
 --- !u!114 &114152574392247032
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -90,9 +90,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Explosion: {fileID: 1530813856715798, guid: c00e4c34e0ca7c44fadf7effeee3ee73, type: 2}
+  explosionSound: {fileID: 8300000, guid: 05a4104754c8b9e4dbccffca9e5f2e13, type: 3}
   forcaRef: {x: 1, y: 1}
-  forca: 1194.9481
-  angulo: 10.441907
+  forca: 475.13538
+  angulo: 31.606583
   timeToDestroy: 10
   isRight: 0
   whoShot: 2
@@ -141,9 +142,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 9f85efd3d791ae84688d41f41be996da, type: 3}
-  m_Color: {r: 1, g: 0.4852941, b: 0.4852941, a: 1}
+  m_SortingOrder: 10
+  m_Sprite: {fileID: 21300002, guid: 5d1cae10c5a1b164796e88b9aaaba413, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +13,7 @@ namespace View
 
         public GameObject Explosion;
 
-        public AudioClip shotCharge, shotSound, gunMoveSound;
+        public AudioClip tiroSound, tiroChargeSound, canhaoSound;
 
         public RectTransform EscudoHolder, MunicaoHolder;
         public GameObject EscudoUI, ShotUI, indicatorUI;
@@ -109,7 +109,6 @@ namespace View
                 EscudoHolder.gameObject.SetActive(false);
                 MunicaoHolder.gameObject.SetActive(false);
             }
-
         }
 
         public void SetPlayerUI()
@@ -190,29 +189,21 @@ namespace View
             if (!gameController.isShotCharging && Input.GetButton("Fire1"))
             {
                 gameController.isShotCharging = true;
-
-                gameController.audioSrc.clip = shotCharge;
-                gameController.audioSrc.volume = 0;
                 gameController.audioSrc.loop = true;
+                gameController.audioSrc.clip = tiroChargeSound;
                 gameController.audioSrc.Play();
-
             }
             if (gameController.isShotCharging && Input.GetButton("Fire1"))
             {
                 gameController.CurrentPlayerForce += gameController.shotForce * forceMultiplier;
                 forceMultiplier += 100f * Time.deltaTime;
-                if (gameController.audioSrc.volume < 1)
-                {
-                    gameController.audioSrc.volume += 0.005f;
-                }
             }
             else if (gameController.isShotCharging && !Input.GetButton("Fire1"))
             {
-                gameController.isShotCharging = false;
-
                 gameController.audioSrc.loop = false;
                 gameController.audioSrc.Stop();
-                gameController.audioSrc.volume = 1f;
+                gameController.PlaySound(tiroSound);
+                gameController.isShotCharging = false;
                 Atirar();
                 forceMultiplier = 1f;
                 gameController.CurrentPlayerForce = 0;
@@ -229,10 +220,8 @@ namespace View
             shot.GetComponent<ShotMover>().angulo = playerController.GetAngulo();
             shot.GetComponent<ShotMover>().isRight = gameController.GetPlayerSide() == 1;
             shot.GetComponent<ShotMover>().whoShot = gameController.GetPlayerSide();
-            //Instantiate(shotParticle, playerShotReference.transform.position, playerArmaTransform.transform.rotation);
-            playerArmaTransform.GetComponent<Animator>().SetTrigger("Shoot");
+            Instantiate(shotParticle, playerShotReference.transform.position, new Quaternion(0f, playerArmaTransform.transform.rotation.eulerAngles.y, 0f, 0f));
             Instantiate(shot, playerShotReference.transform.position, playerShotReference.transform.rotation);
-            gameController.PlaySound(shotSound);
             StartCoroutine(EndTurn());
         }
 
@@ -245,36 +234,20 @@ namespace View
 
         public void AjustarAngulo(float angulo)
         {
-            if (!gameController.isShotCharging)
+            if (angulo != 0)
             {
-
-                if (angulo != 0)
+                float rotation = playerController.AjustarAngulo(angulo);
+                if (!gameController.audioSrc.isPlaying)
                 {
-                    float rotation = playerController.AjustarAngulo(angulo);
-                    if (!gameController.audioSrc.isPlaying && rotation < 60f && rotation > 0)
-                    {
-                        gameController.audioSrc.clip = gunMoveSound;
-                        gameController.audioSrc.loop = true;
-                        gameController.audioSrc.Play();
-                    }
-                    else if (rotation >= 60f || rotation <= 0)
-                    {
-                        gameController.audioSrc.loop = false;
-                        gameController.audioSrc.Stop();
-                    }
+                    gameController.PlaySound(canhaoSound);
                 }
-                else
-                {
-                    gameController.audioSrc.loop = false;
-                    gameController.audioSrc.Stop();
-                }
-
             }
+
         }
         public void AjustarRotacaoArma()
         {
             float rotation = playerController.GetAngulo();
-            playerArmaTransform.rotation = Quaternion.Euler(0f, 0f, thisPlayer == 1 ? (rotation - 90) : -(rotation - 90));
+            playerArmaTransform.rotation = Quaternion.Euler(0f, 0f, thisPlayer == 1 ? rotation - 90 : -(rotation - 90));
         }
 
         public void Morrer()
@@ -290,3 +263,4 @@ namespace View
 
     }
 }
+

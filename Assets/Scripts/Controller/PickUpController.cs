@@ -7,7 +7,7 @@ namespace Controller
     public class PickUpController : MonoBehaviour
     {
         GameController gameController;
-
+        public AudioClip bonusSound;
         public float amplitude;
         public float period;
 
@@ -53,6 +53,7 @@ namespace Controller
             Instantiate(Explosion, transform.position, transform.rotation);
             Destroy(gameObject);
             Destroy(collision.gameObject);
+            gameController.PlaySound(bonusSound);
         }
     }
 }

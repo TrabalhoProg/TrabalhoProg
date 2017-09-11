@@ -78,6 +78,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c0648e3b47dc9c4c8e7bbe1df1f5581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bonusSound: {fileID: 8300000, guid: 41218d01a27793c4f906a08cd06f563a, type: 3}
   amplitude: 0.2
   period: 0.3
   Explosion: {fileID: 1530813856715798, guid: c00e4c34e0ca7c44fadf7effeee3ee73, type: 2}

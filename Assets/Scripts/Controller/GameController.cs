@@ -9,6 +9,7 @@ namespace Controller
     {
 
         public GameObject[] tiros, pickupItems;
+        public AudioSource audioSrc;
 
         public Transform[] pickUpSpawnRefEsq, pickUpSpawnRefDir;
         public int pickUpSpawnCount = 4;
@@ -116,7 +117,7 @@ namespace Controller
             player2Controller.CarregarTiros(tiros);
             //player2Controller.gameObject.SetActive(true);
             player2Controller.gameObject.SetActive(false);
-         
+
             gameModel = new GameModel();
             //partidas = new Stack<GameModel>();
             isShotCharging = false;
@@ -342,6 +343,16 @@ namespace Controller
             //        }
             //    }
             //}
+        }
+
+        public void PlaySound(AudioClip audio)
+        {
+            audioSrc.PlayOneShot(audio);
+        }
+
+        public void Restart()
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
         }
     }
 }

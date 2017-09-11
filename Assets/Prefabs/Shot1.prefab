@@ -41,7 +41,7 @@ Transform:
   m_GameObject: {fileID: 1205330197665496}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -78,8 +78,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.06}
-  m_Size: {x: 0.29, y: 0.72}
+  m_Offset: {x: 0, y: 0.76}
+  m_Size: {x: 0.89, y: 1.65}
   m_Direction: 0
 --- !u!95 &95608087077987216
 Animator:
@@ -110,15 +110,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Explosion: {fileID: 1530813856715798, guid: c00e4c34e0ca7c44fadf7effeee3ee73, type: 2}
+  explosionSound: {fileID: 8300000, guid: 05a4104754c8b9e4dbccffca9e5f2e13, type: 3}
   forcaRef: {x: 1, y: 1}
-  forca: 702.76495
-  angulo: 29.003323
+  forca: 1200
+  angulo: 19.315258
   timeToDestroy: 4
-  isRight: 1
-  whoShot: 1
+  isRight: 0
+  whoShot: 2
   canChangeColor: 0
   colorsToChange: []
   timeToChange: 0
+  shotDisperse: 0
+  timeToDisperse: 0
+  removeMovimento: 0
 --- !u!198 &198033135979746250
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -178,7 +182,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: -517195229
+  randomSeed: 1578190638
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -627,7 +631,7 @@ ParticleSystem:
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.2
-    m_Position: {x: 0, y: -0.3, z: 0}
+    m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
@@ -643,7 +647,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.01
+      value: 0.19
       mode: 0
       spread: 0
       speed:
@@ -3464,8 +3468,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 3a1a45c3e91d2fb4bbe18730b8fe9bd4, type: 3}
+  m_SortingOrder: 10
+  m_Sprite: {fileID: 21300000, guid: 5d1cae10c5a1b164796e88b9aaaba413, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
