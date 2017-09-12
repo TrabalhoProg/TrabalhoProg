@@ -90,7 +90,7 @@ namespace Model
 
         public void AumentarEscudo()
         {
-            if (_escudo > 0 && _escudo < 5)
+            if (_escudo >= 0 && _escudo < 5)
             {
                 _escudo++;
             }

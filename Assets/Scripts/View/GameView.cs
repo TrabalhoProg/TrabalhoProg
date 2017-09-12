@@ -20,7 +20,6 @@ namespace View
 
         private void Start()
         {
-            //sliderAnimator = forcaSlider.gameObject.GetComponentInChildren<Animator>();
             forcaSlider.maxValue = gameController.playerMaxForce;
             UpdateUI();
         }
@@ -66,7 +65,7 @@ namespace View
                 movementText.gameObject.SetActive(false);
                 forcaSlider.gameObject.SetActive(false);
                 generalUI.gameObject.SetActive(true);
-                generalUI.text = gameController.GetPlayerSide() == 1 ? "Escolha a posição do Player 1" : "Escolha a posição do Player 2";
+                generalUI.text = gameController.GetPlayerSide() == 1 ? "Escolha a posição do Player 1 no lado esquerdo da tela" : "Escolha a posição do Player 2 no lado direito da tela";
                 Vector3 mouseRef = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 if (Input.GetMouseButtonDown(0)
                     && gameController.GetPlayerSide() == 1
